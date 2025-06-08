@@ -37,7 +37,7 @@ down:
 restart:
 	$(COMPOSE) down && $(COMPOSE) up -d
 
-# Django commands
+# Backend commands
 migrate:
 	$(COMPOSE) exec $(BACKEND_SERVICE) python manage.py migrate
 
@@ -61,7 +61,7 @@ be-lint:
 	$(COMPOSE) exec $(BACKEND_SERVICE) ruff check .
 	$(COMPOSE) exec $(BACKEND_SERVICE) black --check .
 
-
+# Frontend commands
 fe-test:
 	$(COMPOSE) exec $(FRONTEND_SERVICE) npm run test
 
