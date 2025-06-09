@@ -113,8 +113,8 @@ export default function AppointmentItem({
     const payload = {
       employee: 'http://localhost:8000/api/v1/employees/1/', // Hardcoded employee, it should be authenticated user/employee
       title,
-      start_datetime: new Date(start).toISOString(),
-      end_datetime: new Date(end).toISOString(),
+      start_datetime: start,
+      end_datetime: end,
       participants: selectedEmployees.map((emp) => emp.url),
     };
 
