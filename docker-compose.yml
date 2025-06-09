@@ -35,6 +35,7 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+    command: npm run dev
     volumes:
       - ./frontend/src:/app/src
     ports:
