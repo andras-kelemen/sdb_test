@@ -10,7 +10,7 @@ from .serializers import AppointmentReadSerializer, AppointmentWriteSerializer
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
-    queryset = Appointment.objects.all()
+    queryset = Appointment.objects.select_related("employee").prefetch_related("participants")
     filter_backends = [DjangoFilterBackend]
     filterset_class = AppointmentFilter
     _saved_instance = None
@@ -43,9 +43,14 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         """
         Return the nearest future Appointment.
         """
-        now = timezone.now()
 
-        result = Appointment.objects.filter(end_datetime__gte=now).order_by("start_datetime").first()
+        result = (
+            Appointment.objects.select_related("employee")
+            .prefetch_related("participants")
+            .filter(end_datetime__gte=timezone.now())
+            .order_by("start_datetime")
+            .first()
+        )
 
         if result:
             serializer = AppointmentReadSerializer(result, context={"request": request})

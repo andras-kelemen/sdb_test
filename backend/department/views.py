@@ -10,12 +10,12 @@ from .serializers import DepartmentSerializer
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):
-    queryset = Department.objects.all()
+    queryset = Department.objects.select_related("manager").all()
     serializer_class = DepartmentSerializer
 
     @action(detail=True, methods=["get"])
     def employees(self, request, pk=None):
         department = self.get_object()
-        employees = Employee.objects.filter(department=department)
+        employees = Employee.objects.filter(department=department).select_related("department")
         serializer = EmployeeSerializer(employees, many=True, context={"request": request})
         return Response(serializer.data)
